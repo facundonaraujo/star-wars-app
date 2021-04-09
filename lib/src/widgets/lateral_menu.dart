@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:star_wars_app/src/models/status_model.dart';
+import 'package:star_wars_app/src/provider/status_model.dart';
 
 class LateralMenu extends StatefulWidget {
   @override
@@ -21,10 +21,9 @@ class _LateralMenuState extends State<LateralMenu> {
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.all(20),
-                child: Text(
-                  'STAR WARS',
-                  style: TextStyle(color: Colors.white, fontSize: 25),
+                padding: EdgeInsets.all(40),
+                child: Image(
+                  image: AssetImage('assets/star-wars-logo.png'),
                 ),
               ),
               ListTile(
@@ -38,7 +37,8 @@ class _LateralMenuState extends State<LateralMenu> {
                 ),
                 trailing: Switch.adaptive(
                   value: statusProvider.status,
-                  activeColor: Color(0xff7C76B8),
+                  activeColor: Color(0xffC0BAF7),
+                  activeTrackColor: Color(0xff504F61),
                   onChanged: (bool value) {
                     setState(() {
                       final statusProvider =

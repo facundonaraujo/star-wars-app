@@ -7,7 +7,7 @@ class CharacterService {
   String _url = 'swapi.dev';
 
   int _characterPage = 1;
-  bool _cargando = false;
+  bool _loading = false;
 
   List<Character> _characters = new List();
 
@@ -24,29 +24,29 @@ class CharacterService {
     _charactersStreamController?.close();
   }
 
-  Future<List<Character>> _procesarRespuesta(Uri url) async {
+  Future<List<Character>> _processCharacters(Uri url) async {
     final resp = await http.get(url);
     final decodedData = json.decode(resp.body);
-    final peliculas = new Characters.fromJsonList(decodedData['results']);
-    return peliculas.items;
+    final charact = new CharactersList.fromJsonList(decodedData['results']);
+    return charact.items;
   }
 
-  Future<List<Character>> getCharacters() async {
-    if (_cargando) return [];
+  Future<List<dynamic>> getCharacters() async {
+    if (_loading) return ['LOADING'];
 
-    _cargando = true;
+    _loading = true;
 
     _characterPage++;
 
     final url =
         Uri.https(_url, 'api/people', {'page': _characterPage.toString()});
 
-    final resp = await _procesarRespuesta(url);
+    final resp = await _processCharacters(url);
 
     _characters.addAll(resp);
     charactersSink(_characters);
 
-    _cargando = false;
+    _loading = false;
     return resp;
   }
 }

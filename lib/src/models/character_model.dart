@@ -109,12 +109,12 @@ class Character {
       };
 }
 
-class Characters {
+class CharactersList {
   List<Character> items = new List();
 
-  Characters();
+  CharactersList();
 
-  Characters.fromJsonList(List<dynamic> jsonList) {
+  CharactersList.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
 
     for (var item in jsonList) {

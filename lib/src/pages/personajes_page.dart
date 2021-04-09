@@ -1,7 +1,7 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:star_wars_app/src/models/character_model.dart';
-import 'package:star_wars_app/src/models/status_model.dart';
+import 'package:star_wars_app/src/provider/status_model.dart';
 import 'package:star_wars_app/src/services/characters_service.dart';
 import 'package:star_wars_app/src/widgets/character_list.dart';
 import 'package:star_wars_app/src/widgets/lateral_menu.dart';
@@ -21,7 +21,7 @@ class _PersonajesPageState extends State<PersonajesPage> {
         centerTitle: true,
         title: Text(
           'Star Wars',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white, fontSize: 23),
         ),
         elevation: 1,
         backgroundColor: Color(0xff232042),
@@ -47,7 +47,7 @@ class _PersonajesPageState extends State<PersonajesPage> {
 }
 
 class _CharacterList extends StatelessWidget {
-  final characterService = new CharacterService();
+  final CharacterService characterService = new CharacterService();
   @override
   Widget build(BuildContext context) {
     characterService.getCharacters();
@@ -61,8 +61,13 @@ class _CharacterList extends StatelessWidget {
           );
         } else {
           return Center(
-              child: CircularProgressIndicator(
-            valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
+              child: Pulse(
+            infinite: true,
+            duration: Duration(milliseconds: 1500),
+            child: Image(
+              image: AssetImage('assets/star-wars-logo.png'),
+              height: 100,
+            ),
           ));
         }
       },

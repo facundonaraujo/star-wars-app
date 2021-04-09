@@ -33,32 +33,41 @@ class CharacterDetailService {
   }
 
   Future getCharacterDetails(Character character) async {
-    var respPlanet;
+    try {
+      var respPlanet;
 
-    if (character.homeworld != null && character.homeworld != '') {
-      final urlPlanet = character.homeworld;
-      respPlanet = await _processPlanet(urlPlanet);
-    }
-
-    if (character.vehicles != null && character.vehicles.length > 0) {
-      for (var i = 0; i < character.vehicles.length; i++) {
-        final urlvehicles = character.vehicles[i];
-        final respVehicles = await _processVehicles(urlvehicles);
-        _vehicles.add(respVehicles);
+      if (character.homeworld != null && character.homeworld != '') {
+        final urlPlanet = character.homeworld;
+        respPlanet = await _processPlanet(urlPlanet);
       }
-    }
 
-    if (character.starships != null && character.starships.length > 0) {
-      for (var i = 0; i < character.starships.length; i++) {
-        final urlStarships = character.starships[i];
-        final respStarships = await _processStarships(urlStarships);
-        _startships.add(respStarships);
+      if (character.vehicles != null && character.vehicles.length > 0) {
+        for (var i = 0; i < character.vehicles.length; i++) {
+          final urlvehicles = character.vehicles[i];
+          final respVehicles = await _processVehicles(urlvehicles);
+          _vehicles.add(respVehicles);
+        }
       }
+
+      if (character.starships != null && character.starships.length > 0) {
+        for (var i = 0; i < character.starships.length; i++) {
+          final urlStarships = character.starships[i];
+          final respStarships = await _processStarships(urlStarships);
+          _startships.add(respStarships);
+        }
+      }
+
+      final CharacterDetail resp = new CharacterDetail(
+          planet: respPlanet, startships: _startships, vehicles: _vehicles);
+
+      return resp;
+    } catch (e) {
+      final Planet errPlanet = new Planet(name: 'Unknown');
+      final List<Vehicle> errVehicles = new List();
+      final List<Starship> errstartships = new List();
+      final CharacterDetail resp = new CharacterDetail(
+          planet: errPlanet, startships: errstartships, vehicles: errVehicles);
+      return resp;
     }
-
-    final CharacterDetail resp = new CharacterDetail(
-        planet: respPlanet, startships: _startships, vehicles: _vehicles);
-
-    return resp;
   }
 }

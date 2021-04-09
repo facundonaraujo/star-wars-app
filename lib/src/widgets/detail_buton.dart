@@ -18,11 +18,8 @@ class DetailButton extends StatelessWidget {
       physics: BouncingScrollPhysics(),
       child: ClipRect(
         child: Container(
-          // height: 160,
           margin: EdgeInsets.all(10),
           decoration: BoxDecoration(
-            // color: Color(0xff6EA1CC),
-            // color: Color(0xff4F91CB),
             color: Color(0xff676298),
             borderRadius: BorderRadius.circular(20),
           ),

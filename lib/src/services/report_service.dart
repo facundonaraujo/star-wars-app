@@ -8,15 +8,21 @@ class ReportService {
 
   Future<Map<String, dynamic>> getCharacterDetails(Report report) async {
     final url = Uri.https(_url, 'posts');
-    final resp = await http.post(url, body: json.encode(report));
 
-    final decodedData = json.decode(resp.body);
+    try {
+      final resp = await http.post(url, body: json.encode(report));
 
-    print('decodedData: $decodedData');
+      final decodedData = json.decode(resp.body);
 
-    if (decodedData.containsKey('id')) {
-      return {'ok': true, 'id': decodedData['id']};
-    } else {
+      if (decodedData.containsKey('id')) {
+        return {'ok': true, 'id': decodedData['id']};
+      } else {
+        return {
+          'ok': false,
+          'message': 'Report could not be made, please try again'
+        };
+      }
+    } catch (e) {
       return {
         'ok': false,
         'message': 'Report could not be made, please try again'

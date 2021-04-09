@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -86,7 +87,42 @@ class PersonajeDetallePage extends StatelessWidget {
         elevation: 0.0,
         color: Color(0xffDC584B),
         textColor: Colors.white,
-        onPressed: () => _sendReport(character, context),
+        onPressed: () => showDialog(
+            barrierColor: Color(0xff322948).withOpacity(0.5),
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                backgroundColor: Color(0xff13112B),
+                title: Text(
+                  'Report',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white),
+                ),
+                content: Container(
+                  height: 50,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text('Are you sure you want to make the report?')
+                    ],
+                  ),
+                ),
+                actions: [
+                  FlatButton(
+                      onPressed: () => Navigator.pop(context, true),
+                      textColor: Colors.green[400],
+                      child: Text('Report!')),
+                  FlatButton(
+                      onPressed: () => Navigator.pop(context, false),
+                      textColor: Colors.red[400],
+                      child: Text('Cancel')),
+                ],
+              );
+            }).then((val) {
+          if (val) {
+            _sendReport(character, context);
+          }
+        }),
       ),
     );
   }
@@ -103,16 +139,18 @@ class PersonajeDetallePage extends StatelessWidget {
     if (resp['ok'] == true) {
       showAlert(
           context: context,
-          titulo: 'Report Sent',
-          mensaje: 'The report was sent successfully',
-          icono: Icons.check_circle);
+          title: 'Report Sent',
+          message: 'The report was sent successfully',
+          icon: Icons.check_circle,
+          iconColor: Colors.greenAccent);
     } else {
       showAlert(
           context: context,
-          titulo: 'Error',
-          mensaje: resp['message'],
-          icono: Icons.error,
-          colorTitulo: Colors.red);
+          title: 'Error',
+          message: resp['message'],
+          icon: Icons.error,
+          titleColor: Colors.red,
+          iconColor: Colors.red);
     }
   }
 

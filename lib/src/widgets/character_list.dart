@@ -139,9 +139,12 @@ class _VerticalCharacterListState extends State<VerticalCharacterList> {
     if (!nextPag.contains('LOADING')) {
       _isLoading = false;
       setState(() {});
-      if (nextPag.length > 0) {
-        _scrollController.animateTo(_scrollController.position.pixels + 100,
-            duration: Duration(milliseconds: 250), curve: Curves.fastOutSlowIn);
+      if (!nextPag.contains('ERROR')) {
+        if (nextPag.length > 0) {
+          _scrollController.animateTo(_scrollController.position.pixels + 100,
+              duration: Duration(milliseconds: 250),
+              curve: Curves.fastOutSlowIn);
+        }
       }
     }
   }

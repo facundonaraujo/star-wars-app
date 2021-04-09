@@ -32,21 +32,27 @@ class CharacterService {
   }
 
   Future<List<dynamic>> getCharacters() async {
-    if (_loading) return ['LOADING'];
+    try {
+      if (_loading) return ['LOADING'];
 
-    _loading = true;
+      _loading = true;
 
-    _characterPage++;
+      _characterPage++;
 
-    final url =
-        Uri.https(_url, 'api/people', {'page': _characterPage.toString()});
+      final url =
+          Uri.https(_url, 'api/people', {'page': _characterPage.toString()});
 
-    final resp = await _processCharacters(url);
+      final resp = await _processCharacters(url);
 
-    _characters.addAll(resp);
-    charactersSink(_characters);
+      _characters.addAll(resp);
+      charactersSink(_characters);
 
-    _loading = false;
-    return resp;
+      _loading = false;
+      return resp;
+    } catch (e) {
+      List<Character> _charactersEmpty = new List();
+      charactersSink(_charactersEmpty);
+      return ['ERROR'];
+    }
   }
 }

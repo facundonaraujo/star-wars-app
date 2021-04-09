@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 
 void showAlert(
     {BuildContext context,
-    String titulo,
-    String mensaje,
-    IconData icono,
-    Color colorTitulo = Colors.white}) {
+    String title,
+    String message,
+    IconData icon,
+    Color titleColor = Colors.white,
+    Color iconColor = Colors.white}) {
   showDialog(
       barrierColor: Color(0xff322948).withOpacity(0.5),
       context: context,
@@ -13,23 +14,23 @@ void showAlert(
         return AlertDialog(
           backgroundColor: Color(0xff13112B),
           title: Text(
-            titulo,
+            title,
             textAlign: TextAlign.center,
-            style: TextStyle(color: colorTitulo),
+            style: TextStyle(color: titleColor),
           ),
           content: Container(
-            height: 100,
+            height: 120,
             child: Column(
               children: [
                 Icon(
-                  icono,
-                  color: Colors.greenAccent,
+                  icon,
+                  color: iconColor,
                   size: 50,
                 ),
                 SizedBox(
                   height: 15,
                 ),
-                Text(mensaje)
+                Text(message)
               ],
             ),
           ),

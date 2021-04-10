@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:star_wars_app/src/bloc/characters_bloc/characters_bloc.dart';
+import 'package:star_wars_app/src/bloc/status_bloc/statusmode_bloc.dart';
 import 'package:star_wars_app/src/models/character_model.dart';
 
 class VerticalCharacterList extends StatefulWidget {
@@ -20,18 +23,31 @@ class _VerticalCharacterListState extends State<VerticalCharacterList> {
 
   @override
   Widget build(BuildContext context) {
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels >=
-          _scrollController.position.maxScrollExtent) {
-        _getNewCharacters();
-      }
-    });
+    return BlocBuilder<StatusmodeBloc, StatusmodeState>(
+      builder: (context, state) {
+        var status = (state.statusMode != null) ? state.statusMode : false;
+        if (status) {
+          _scrollController.addListener(() {
+            if (_scrollController.position.pixels >=
+                _scrollController.position.maxScrollExtent) {
+              _getNewCharacters();
+            }
+          });
 
-    return Stack(
-      children: [
-        _createList(),
-        _createLoading(),
-      ],
+          return Stack(
+            children: [
+              _createList(),
+              _createLoading(),
+            ],
+          );
+        } else {
+          return Stack(
+            children: [
+              _createList(),
+            ],
+          );
+        }
+      },
     );
   }
 

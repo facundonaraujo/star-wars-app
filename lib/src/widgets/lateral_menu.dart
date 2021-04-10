@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:star_wars_app/src/provider/status_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:star_wars_app/src/bloc/status_bloc/statusmode_bloc.dart';
 
 class LateralMenu extends StatefulWidget {
   @override
@@ -10,7 +10,6 @@ class LateralMenu extends StatefulWidget {
 class _LateralMenuState extends State<LateralMenu> {
   @override
   Widget build(BuildContext context) {
-    final statusProvider = Provider.of<StatusModel>(context);
     return Drawer(
       elevation: 0,
       child: Container(
@@ -26,27 +25,32 @@ class _LateralMenuState extends State<LateralMenu> {
                   image: AssetImage('assets/star-wars-logo.png'),
                 ),
               ),
-              ListTile(
-                leading: Icon(
-                  Icons.wifi,
-                  color: Colors.white,
-                ),
-                title: Text(
-                  'Online',
-                  style: TextStyle(fontSize: 18),
-                ),
-                trailing: Switch.adaptive(
-                  value: statusProvider.status,
-                  activeColor: Color(0xffC0BAF7),
-                  activeTrackColor: Color(0xff504F61),
-                  onChanged: (bool value) {
-                    setState(() {
-                      final statusProvider =
-                          Provider.of<StatusModel>(context, listen: false);
-                      statusProvider.status = value;
-                    });
-                  },
-                ),
+              BlocBuilder<StatusmodeBloc, StatusmodeState>(
+                builder: (context, state) {
+                  var status =
+                      (state.statusMode != null) ? state.statusMode : false;
+                  return ListTile(
+                    leading: Icon(
+                      Icons.wifi,
+                      color: Colors.white,
+                    ),
+                    title: Text(
+                      'Online',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    trailing: Switch.adaptive(
+                      value: status,
+                      activeColor: Color(0xffC0BAF7),
+                      activeTrackColor: Color(0xff504F61),
+                      onChanged: (bool value) {
+                        setState(() {
+                          BlocProvider.of<StatusmodeBloc>(context)
+                              .add(ChangeStatusMode(value));
+                        });
+                      },
+                    ),
+                  );
+                },
               ),
             ],
           ),

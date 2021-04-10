@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:star_wars_app/src/bloc/status_bloc/statusmode_bloc.dart';
 import 'package:star_wars_app/src/models/character_detail_model.dart';
 import 'package:star_wars_app/src/models/character_model.dart';
 import 'package:star_wars_app/src/models/report_model.dart';
-import 'package:star_wars_app/src/provider/status_model.dart';
 import 'package:star_wars_app/src/services/character_detail_service.dart';
 import 'package:star_wars_app/src/services/report_service.dart';
 import 'package:star_wars_app/src/utils/utils.dart';
@@ -17,7 +17,6 @@ class PersonajeDetallePage extends StatelessWidget {
     final Character character = ModalRoute.of(context).settings.arguments;
     final CharacterDetailService characterDetailService =
         new CharacterDetailService();
-    final statusProvider = Provider.of<StatusModel>(context);
     return Scaffold(
       appBar: new AppBar(
         centerTitle: true,
@@ -40,9 +39,17 @@ class PersonajeDetallePage extends StatelessWidget {
                     height: 20,
                   ),
                   _characterAtributes(character, snapshot.data),
-                  (statusProvider.status)
-                      ? _reportButton(character, context)
-                      : Container(),
+                  BlocBuilder<StatusmodeBloc, StatusmodeState>(
+                    builder: (context, state) {
+                      var status =
+                          (state.statusMode != null) ? state.statusMode : false;
+                      if (status) {
+                        return _reportButton(character, context);
+                      } else {
+                        return Container();
+                      }
+                    },
+                  ),
                   SizedBox(
                     height: 20,
                   ),

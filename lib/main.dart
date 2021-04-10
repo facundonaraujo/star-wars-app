@@ -1,21 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import 'package:star_wars_app/src/provider/status_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:star_wars_app/src/bloc/characters_bloc/characters_bloc.dart';
+import 'package:star_wars_app/src/bloc/status_bloc/statusmode_bloc.dart';
 import 'package:star_wars_app/src/pages/personajes_page.dart';
 import 'package:star_wars_app/src/routes/routes.dart';
 import 'package:star_wars_app/src/theme/theme.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  HydratedBloc.storage = await HydratedStorage.build();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Colors.transparent));
-    return MultiProvider(
+    return MultiBlocProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => StatusModel()),
+        BlocProvider(create: (_) => new StatusmodeBloc()),
+        BlocProvider(create: (_) => new CharactersBloc()),
       ],
       child: MaterialApp(
         title: 'Star Wars App',

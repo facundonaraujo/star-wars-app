@@ -58,7 +58,10 @@ class CharacterDetailService {
       }
 
       final CharacterDetail resp = new CharacterDetail(
-          planet: respPlanet, startships: _startships, vehicles: _vehicles);
+          planet: respPlanet,
+          startships: _startships,
+          vehicles: _vehicles,
+          character: character);
 
       return resp;
     } catch (e) {
@@ -66,7 +69,10 @@ class CharacterDetailService {
       final List<Vehicle> errVehicles = new List();
       final List<Starship> errstartships = new List();
       final CharacterDetail resp = new CharacterDetail(
-          planet: errPlanet, startships: errstartships, vehicles: errVehicles);
+          planet: errPlanet,
+          startships: errstartships,
+          vehicles: errVehicles,
+          character: character);
       return resp;
     }
   }

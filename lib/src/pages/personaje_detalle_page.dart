@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:star_wars_app/src/bloc/character_detail_bloc/character_detail_bloc.dart';
 import 'package:star_wars_app/src/bloc/status_bloc/statusmode_bloc.dart';
 import 'package:star_wars_app/src/models/character_detail_model.dart';
 import 'package:star_wars_app/src/models/character_model.dart';
@@ -38,6 +39,32 @@ class PersonajeDetallePage extends StatelessWidget {
                   future: characterDetailService.getCharacterDetails(character),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.hasData) {
+                      var provider =
+                          BlocProvider.of<CharacterDetailBloc>(context).state;
+                      if (provider.charactersDetails != null &&
+                          provider.charactersDetails.length > 0) {
+                        bool isInList = false;
+                        CharacterDetail char = snapshot.data;
+                        for (CharacterDetail chadet
+                            in provider.charactersDetails) {
+                          if (chadet.character.url == char.character.url) {
+                            isInList = true;
+                          }
+                        }
+                        if (!isInList) {
+                          List<CharacterDetail> detChar =
+                              provider.charactersDetails;
+                          detChar.add(snapshot.data);
+                          BlocProvider.of<CharacterDetailBloc>(context)
+                              .add(AddCharacterDetail(detChar));
+                        }
+                      } else {
+                        List<CharacterDetail> detChar = [];
+                        detChar.add(snapshot.data);
+                        BlocProvider.of<CharacterDetailBloc>(context)
+                            .add(AddCharacterDetail(detChar));
+                      }
+
                       return Column(
                         children: [
                           SizedBox(
@@ -71,16 +98,58 @@ class PersonajeDetallePage extends StatelessWidget {
                   },
                 );
               } else {
-                return Column(
-                  children: [
-                    SizedBox(
-                      height: 20,
-                    ),
-                    _characterAtributesOFFline(character),
-                    SizedBox(
-                      height: 20,
-                    ),
-                  ],
+                return BlocBuilder<CharacterDetailBloc, CharacterDetailState>(
+                  builder: (context, state) {
+                    if (state.charactersDetails != null &&
+                        state.charactersDetails.length > 0) {
+                      bool isInList = false;
+                      CharacterDetail characterDetails;
+                      for (var characterDetail in state.charactersDetails) {
+                        if (characterDetail.character.url == character.url) {
+                          isInList = true;
+                          characterDetails = characterDetail;
+                        }
+                      }
+                      if (isInList) {
+                        return Column(
+                          children: [
+                            SizedBox(
+                              height: 20,
+                            ),
+                            _characterAtributesOnline(
+                                character, characterDetails),
+                            SizedBox(
+                              height: 20,
+                            ),
+                          ],
+                        );
+                      } else {
+                        return Column(
+                          children: [
+                            SizedBox(
+                              height: 20,
+                            ),
+                            _characterAtributesOFFline(character),
+                            SizedBox(
+                              height: 20,
+                            ),
+                          ],
+                        );
+                      }
+                    } else {
+                      return Column(
+                        children: [
+                          SizedBox(
+                            height: 20,
+                          ),
+                          _characterAtributesOFFline(character),
+                          SizedBox(
+                            height: 20,
+                          ),
+                        ],
+                      );
+                    }
+                  },
                 );
               }
             },

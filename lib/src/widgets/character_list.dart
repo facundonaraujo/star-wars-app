@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:star_wars_app/src/bloc/characters_bloc/characters_bloc.dart';
 import 'package:star_wars_app/src/bloc/status_bloc/statusmode_bloc.dart';
 import 'package:star_wars_app/src/models/character_model.dart';
 

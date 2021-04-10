@@ -4,7 +4,7 @@ part of 'characters_bloc.dart';
 abstract class CharactersEvent {}
 
 class ChangeCharacters extends CharactersEvent {
-  final List<Character> characters;
+  final List<dynamic> characters;
 
   ChangeCharacters(this.characters);
 }

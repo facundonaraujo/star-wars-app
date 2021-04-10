@@ -28,54 +28,63 @@ class PersonajeDetallePage extends StatelessWidget {
         backgroundColor: Color(0xff232042),
       ),
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: FutureBuilder(
-          future: characterDetailService.getCharacterDetails(character),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.hasData) {
-              return Column(
-                children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  _characterAtributes(character, snapshot.data),
-                  BlocBuilder<StatusmodeBloc, StatusmodeState>(
-                    builder: (context, state) {
-                      var status =
-                          (state.statusMode != null) ? state.statusMode : false;
-                      if (status) {
-                        return _reportButton(character, context);
-                      } else {
-                        return Container();
-                      }
-                    },
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                ],
-              );
-            } else {
-              return Column(
-                children: [
-                  SizedBox(
-                    height: 250,
-                  ),
-                  Center(
-                      child: Pulse(
-                    infinite: true,
-                    duration: Duration(milliseconds: 1800),
-                    child: Image(
-                      image: AssetImage('assets/star-wars-logo.png'),
-                      height: 100,
+          physics: BouncingScrollPhysics(),
+          child: BlocBuilder<StatusmodeBloc, StatusmodeState>(
+            builder: (context, state) {
+              var status =
+                  (state.statusMode != null) ? state.statusMode : false;
+              if (status == true) {
+                return FutureBuilder(
+                  future: characterDetailService.getCharacterDetails(character),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.hasData) {
+                      return Column(
+                        children: [
+                          SizedBox(
+                            height: 20,
+                          ),
+                          _characterAtributesOnline(character, snapshot.data),
+                          _reportButton(character, context),
+                          SizedBox(
+                            height: 20,
+                          ),
+                        ],
+                      );
+                    } else {
+                      return Column(
+                        children: [
+                          SizedBox(
+                            height: 250,
+                          ),
+                          Center(
+                              child: Pulse(
+                            infinite: true,
+                            duration: Duration(milliseconds: 1800),
+                            child: Image(
+                              image: AssetImage('assets/star-wars-logo.png'),
+                              height: 100,
+                            ),
+                          ))
+                        ],
+                      );
+                    }
+                  },
+                );
+              } else {
+                return Column(
+                  children: [
+                    SizedBox(
+                      height: 20,
                     ),
-                  ))
-                ],
-              );
-            }
-          },
-        ),
-      ),
+                    _characterAtributesOFFline(character),
+                    SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                );
+              }
+            },
+          )),
     );
   }
 
@@ -161,7 +170,7 @@ class PersonajeDetallePage extends StatelessWidget {
     }
   }
 
-  Widget _characterAtributes(
+  Widget _characterAtributesOnline(
       Character character, CharacterDetail characterDetails) {
     final startships = Container(
       child: Column(
@@ -236,6 +245,44 @@ class PersonajeDetallePage extends StatelessWidget {
                     customSubtitle: vehicles,
                   ),
                 ]),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _characterAtributesOFFline(Character character) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Table(
+            children: [
+              TableRow(children: [
+                DetailButton(
+                  title: 'Hair Color',
+                  subitle:
+                      '${character.hairColor.substring(0, 1).toUpperCase() + character.hairColor.substring(1, character.hairColor.length)}',
+                ),
+                DetailButton(
+                  title: 'Skin Color',
+                  subitle:
+                      '${character.skinColor.substring(0, 1).toUpperCase() + character.skinColor.substring(1, character.skinColor.length)}',
+                ),
+              ]),
+              TableRow(children: [
+                DetailButton(
+                  title: 'Eye Color',
+                  subitle:
+                      '${character.eyeColor.substring(0, 1).toUpperCase() + character.eyeColor.substring(1, character.eyeColor.length)}',
+                ),
+                DetailButton(
+                  title: 'Homeworld',
+                  subitle: 'Unknown',
+                ),
+              ]),
             ],
           ),
         ],

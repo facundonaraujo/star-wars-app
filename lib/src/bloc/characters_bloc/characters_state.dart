@@ -1,8 +1,7 @@
 part of 'characters_bloc.dart';
 
 class CharactersState {
-  final List<Character> characters;
+  final List<dynamic> characters;
 
-  CharactersState({List<Character> charactersList})
-      : characters = charactersList;
+  CharactersState({List<dynamic> charactersList}) : characters = charactersList;
 }

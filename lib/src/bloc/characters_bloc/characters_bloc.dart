@@ -20,9 +20,12 @@ class CharactersBloc extends HydratedBloc<CharactersEvent, CharactersState> {
   }
 
   @override
-  CharactersState fromJson(Map<String, dynamic> json) =>
-      CharactersState(charactersList: json['characters']);
+  CharactersState fromJson(Map<String, dynamic> json) {
+    final charact = new CharactersList.fromJsonList(json['characters']);
+    return CharactersState(charactersList: charact.items);
+  }
+
   @override
-  Map<String, List<Character>> toJson(CharactersState state) =>
+  Map<String, List<dynamic>> toJson(CharactersState state) =>
       {'characters': state.characters};
 }

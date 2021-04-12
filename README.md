@@ -28,11 +28,11 @@ En el modo online se realizan las consultas a los respectivos servicios y guarda
 
 La app consta con un tema personalizado inspirado en la paleta de colores de las películas de Star Wars
 
-![Star%20Wars%20App%2036d834ab7e494d729c05e099ef7dd71e/NewCanvas1.jpg](Star%20Wars%20App%2036d834ab7e494d729c05e099ef7dd71e/NewCanvas1.jpg)
+![PaletaDeColoresStarWarsApp](https://github.com/facundonaraujo/star-wars-app/tree/master/PaletaDeColoresStarWarsApp.jpg)
 
 Debido a un problema con los certificados de [https://swapi.dev/](https://swapi.dev/) ocurrido el 11/04/2021 no se puedo añadir la función de búsqueda en la app. 
 
-![Star%20Wars%20App%2036d834ab7e494d729c05e099ef7dd71e/Untitled.png](Star%20Wars%20App%2036d834ab7e494d729c05e099ef7dd71e/Untitled.png)
+![SwapApiError](https://github.com/facundonaraujo/star-wars-app/tree/master/SwapApiError.png)
 
 La idea era de añadir un IconButton en el appbar de PersonajesPage el cual al apretar se abriría un SearchDelegate en el cual si esta en el modo online se consultaría a [https://swapi.dev/api/people/?search=](https://swapi.dev/api/people/?search=a) donde se obtendrían los personajes cuyo nombre coincida con la búsqueda, se los mapearía con el modelo de Character y se dibujaría la lista de personajes que coincidan con la búsqueda con el widget de PersonajesList. En el caso de estar en modo offline se buscaría entre los personajes guardados en el storage de Hydrated Bloc haciendo una map a la lista con la condición de que algún carácter de la búsqueda coincida en el campo de nombre, luego se dibujaría la lista de personajes que coincidan con la búsqueda con el widget de PersonajesList. Lamentablemente al mal funcionamiento de la api no se puedo integrar esta funcionalidad ya que no se pueden hacer las debidas pruebas.
 

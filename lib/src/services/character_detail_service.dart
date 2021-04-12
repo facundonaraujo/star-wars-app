@@ -33,14 +33,19 @@ class CharacterDetailService {
   }
 
   Future getCharacterDetails(Character character) async {
+    // Se intenta obtener los detalles del personaje
     try {
       var respPlanet;
 
+      // Si el personaje tiene un planeta hace la consulta a la api por ese planeta
+      // Y devuelve la respuesta decodificada y mapeada con el modelo de planeta
       if (character.homeworld != null && character.homeworld != '') {
         final urlPlanet = character.homeworld;
         respPlanet = await _processPlanet(urlPlanet);
       }
 
+      // Si el personaje tiene vehiculos hace la consulta por cada vehiculo a la api de vehiculo
+      // Y devuelve la respuesta decodificada y mapeada con el modelo de vehiculo
       if (character.vehicles != null && character.vehicles.length > 0) {
         for (var i = 0; i < character.vehicles.length; i++) {
           final urlvehicles = character.vehicles[i];
@@ -49,6 +54,8 @@ class CharacterDetailService {
         }
       }
 
+      // Si el personaje tiene naves hace la consulta por cada nave a la api de naves
+      // Y devuelve la respuesta decodificada y mapeada con el modelo de naves
       if (character.starships != null && character.starships.length > 0) {
         for (var i = 0; i < character.starships.length; i++) {
           final urlStarships = character.starships[i];
@@ -57,6 +64,7 @@ class CharacterDetailService {
         }
       }
 
+      // Se devuelve un nuevo CharacterDetail con la informacion obtenida
       final CharacterDetail resp = new CharacterDetail(
           planet: respPlanet,
           startships: _startships,
@@ -65,6 +73,8 @@ class CharacterDetailService {
 
       return resp;
     } catch (e) {
+      // En el caso de que se produzca un error al obtener los datos
+      // Se devuelve un new CharacterDetail vacio
       final Planet errPlanet = new Planet(name: 'Unknown');
       final List<Vehicle> errVehicles = new List();
       final List<Starship> errstartships = new List();

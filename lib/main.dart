@@ -10,6 +10,7 @@ import 'package:star_wars_app/src/routes/routes.dart';
 import 'package:star_wars_app/src/theme/theme.dart';
 
 void main() async {
+  // Se inicia el storage de Hydrated Bloc
   WidgetsFlutterBinding.ensureInitialized();
   HydratedBloc.storage = await HydratedStorage.build();
   runApp(MyApp());
@@ -18,8 +19,10 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // Se establece el color de la barra de notificaciones con el color de la app
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Colors.transparent));
+    // Se agrega el MultiBlocProvider donde se inicializan los bloc del estado, del personaje y del personaje detalle
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => new StatusmodeBloc()),
@@ -31,7 +34,9 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: personalTheme,
         initialRoute: 'characters',
+        // Se obtienen las rutas del archivo de rutas
         routes: getApplicationRoutes(),
+        // En el caso de que se de algun error en alguna ruta carga un ruta por defecto que es la de PesonajesPage
         onGenerateRoute: (RouteSettings settings) {
           return MaterialPageRoute(
               builder: (BuildContext context) => PersonajesPage());

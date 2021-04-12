@@ -29,6 +29,8 @@ class _LateralMenuState extends State<LateralMenu> {
                 builder: (context, state) {
                   var status =
                       (state.statusMode != null) ? state.statusMode : false;
+                  // Se obtiene el estado de la app
+                  // El cual se asigna como valor al Switch
                   return ListTile(
                     leading: Icon(
                       Icons.wifi,
@@ -43,6 +45,7 @@ class _LateralMenuState extends State<LateralMenu> {
                       activeColor: Color(0xffC0BAF7),
                       activeTrackColor: Color(0xff504F61),
                       onChanged: (bool value) {
+                        // Cuando se cambia el valor del Switch se lo guarda en el bloc
                         setState(() {
                           BlocProvider.of<StatusmodeBloc>(context)
                               .add(ChangeStatusMode(value));

@@ -8,7 +8,9 @@ class ReportService {
 
   Future<Map<String, dynamic>> getCharacterDetails(Report report) async {
     final url = Uri.https(_url, 'posts');
-
+    // Se comprueba si se puede enviar el reporte
+    // En el caso de que si se pueda se devuelve un Map con el id
+    // En el caso de que no se pueda enviar se devuelve el mensaje de error
     try {
       final resp = await http.post(url, body: json.encode(report));
 

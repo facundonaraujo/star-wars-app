@@ -15,6 +15,7 @@ import 'package:star_wars_app/src/widgets/detail_buton.dart';
 class PersonajeDetallePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // Se obtienen el personaje enviado a traves del boton de la lista de personajes
     final Character character = ModalRoute.of(context).settings.arguments;
     final CharacterDetailService characterDetailService =
         new CharacterDetailService();
@@ -34,13 +35,20 @@ class PersonajeDetallePage extends StatelessWidget {
             builder: (context, state) {
               var status =
                   (state.statusMode != null) ? state.statusMode : false;
+              // Se comprueba en que modo esta en la app
               if (status == true) {
+                // Si esta en modo online se obtienen las naves, vehiculos y planeta del personaje
                 return FutureBuilder(
                   future: characterDetailService.getCharacterDetails(character),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.hasData) {
                       var provider =
                           BlocProvider.of<CharacterDetailBloc>(context).state;
+                      // Se obtiene el estado del bloc de personajes detalles
+                      // El cual es una lista en la que se van almacenado los detalles de cada personajes
+                      // Si la lista no vuelve vacia se comprueba si el detalle del personaje ya esta en la lista
+                      // En el caso de que no este en la lista lo añade al bloc
+                      // Para que en el modo offline se visualice
                       if (provider.charactersDetails != null &&
                           provider.charactersDetails.length > 0) {
                         bool isInList = false;
@@ -59,6 +67,7 @@ class PersonajeDetallePage extends StatelessWidget {
                               .add(AddCharacterDetail(detChar));
                         }
                       } else {
+                        // Si la lista estaba vacia añade el detalle a la lista
                         List<CharacterDetail> detChar = [];
                         detChar.add(snapshot.data);
                         BlocProvider.of<CharacterDetailBloc>(context)
@@ -70,7 +79,9 @@ class PersonajeDetallePage extends StatelessWidget {
                           SizedBox(
                             height: 20,
                           ),
+                          // Se construyen los cuadros con la informacion
                           _characterAtributesOnline(character, snapshot.data),
+                          // Se construye el boton para enviar la info
                           _reportButton(character, context),
                           SizedBox(
                             height: 20,
@@ -78,6 +89,7 @@ class PersonajeDetallePage extends StatelessWidget {
                         ],
                       );
                     } else {
+                      // Mientras espera la informacion del servio muestra el logo de star wars animado
                       return Column(
                         children: [
                           SizedBox(
@@ -98,10 +110,13 @@ class PersonajeDetallePage extends StatelessWidget {
                   },
                 );
               } else {
+                // En el caso de que este en el modo offline se busca en el bloc de CharacterDetailBloc
                 return BlocBuilder<CharacterDetailBloc, CharacterDetailState>(
                   builder: (context, state) {
                     if (state.charactersDetails != null &&
                         state.charactersDetails.length > 0) {
+                      // Se comprueba si la descripcion del personaje esta en la lista del bloc
+                      // Si esta en la lista se construye los cuadros con la informacion obtenida de bloc y con la del personaje
                       bool isInList = false;
                       CharacterDetail characterDetails;
                       for (var characterDetail in state.charactersDetails) {
@@ -124,6 +139,8 @@ class PersonajeDetallePage extends StatelessWidget {
                           ],
                         );
                       } else {
+                        // En el caso de que no este en la lista solo se construyen los cuadros con la informacion del personaje
+                        // No de los que traeria del servicio(naves, vehiculos y planeta)
                         return Column(
                           children: [
                             SizedBox(
@@ -172,6 +189,7 @@ class PersonajeDetallePage extends StatelessWidget {
         elevation: 0.0,
         color: Color(0xffDC584B),
         textColor: Colors.white,
+        // Al apretar el boton de reportar se abre un dialog donde se debe confirmar el reporte o cancelarlo
         onPressed: () => showDialog(
             barrierColor: Color(0xff322948).withOpacity(0.5),
             context: context,
@@ -204,6 +222,8 @@ class PersonajeDetallePage extends StatelessWidget {
                 ],
               );
             }).then((val) {
+          // Se comprueba la respuesta del dialog
+          // Si se confirma la creacion del reporte se envia la informacion
           if (val) {
             _sendReport(character, context);
           }
@@ -218,9 +238,13 @@ class PersonajeDetallePage extends StatelessWidget {
   ) async {
     final ReportService reportService = new ReportService();
     final DateTime now = new DateTime.now();
+    // Se envia la informacion del reporte al servicio
     final Report report = new Report(
         characterName: character.name, dateTime: now.toString(), userId: 1);
     Map resp = await reportService.getCharacterDetails(report);
+    // Obtiene la respuerta de servicio
+    // En el caso de que de que haya enviado correctamente se abre un modal personalizado
+    // Informado que el reporte se envio correctamente
     if (resp['ok'] == true) {
       showAlert(
           context: context,
@@ -229,6 +253,8 @@ class PersonajeDetallePage extends StatelessWidget {
           icon: Icons.check_circle,
           iconColor: Colors.greenAccent);
     } else {
+      // En el caso de que de que se haya producido un error al envirse se abre un modal personalizado
+      // Informado que el reporte no se puedo enviar
       showAlert(
           context: context,
           title: 'Error',

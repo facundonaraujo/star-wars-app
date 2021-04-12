@@ -25,6 +25,9 @@ class _VerticalCharacterListState extends State<VerticalCharacterList> {
     return BlocBuilder<StatusmodeBloc, StatusmodeState>(
       builder: (context, state) {
         var status = (state.statusMode != null) ? state.statusMode : false;
+        // Se comprueba el estado de la app
+        // Si esta en modo online al llegar al maximo de la lista se cargan los proximos 10 personajes
+        // Asi sucecivamente hasta que no se puedan cargar mas, es decir que llegue al maximo de personajes
         if (status) {
           _scrollController.addListener(() {
             if (_scrollController.position.pixels >=
@@ -35,8 +38,8 @@ class _VerticalCharacterListState extends State<VerticalCharacterList> {
 
           return Stack(
             children: [
-              _createList(),
-              _createLoading(),
+              _createList(), // Crea la lista de personajes
+              _createLoading(), // Crea el loading en el caso de que este en el modo online
             ],
           );
         } else {
@@ -150,6 +153,7 @@ class _VerticalCharacterListState extends State<VerticalCharacterList> {
   Future _getNewCharacters() async {
     _isLoading = true;
     setState(() {});
+    // Se obtienen los siguientes personajes
     var nextPag = await widget.nextPage();
     if (!nextPag.contains('LOADING')) {
       _isLoading = false;

@@ -73,8 +73,15 @@ Dependencias utilizadas en el proyecto
 
 ## FLUTTER
 
-**Versión de flutter utilizada 1.22.6**
+Versión de flutter utilizada **1.22.6**
 
 ## DART
 
-**Versión de Dart utilizada 2.10.5**
+Versión de Dart utilizada **2.10.5**
+
+## Run App
+
+Ejecutar en la raiz del proyecto:
+
+    - Flutter pub get
+    - Flutter run

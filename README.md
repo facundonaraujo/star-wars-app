@@ -83,5 +83,5 @@ Versión de Dart utilizada **2.10.5**
 
 Ejecutar en la raiz del proyecto:
 
-    - Flutter pub get
-    - Flutter run
+- Flutter pub get
+- Flutter run

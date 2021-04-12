@@ -6,10 +6,14 @@ import 'package:star_wars_app/src/models/character_model.dart';
 class VerticalCharacterList extends StatefulWidget {
   final List<Character> characters;
   final Function nextPage;
+  final bool isSearch;
+  final String query;
 
   VerticalCharacterList({
     @required this.characters,
     @required this.nextPage,
+    this.isSearch = false,
+    this.query = '',
   });
 
   @override
@@ -154,7 +158,9 @@ class _VerticalCharacterListState extends State<VerticalCharacterList> {
     _isLoading = true;
     setState(() {});
     // Se obtienen los siguientes personajes
-    var nextPag = await widget.nextPage();
+    var nextPag = (widget.isSearch)
+        ? await widget.nextPage(widget.query)
+        : await widget.nextPage();
     if (!nextPag.contains('LOADING')) {
       _isLoading = false;
       setState(() {});

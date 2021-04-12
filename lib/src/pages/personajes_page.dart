@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:star_wars_app/src/bloc/characters_bloc/characters_bloc.dart';
 import 'package:star_wars_app/src/bloc/status_bloc/statusmode_bloc.dart';
 import 'package:star_wars_app/src/models/character_model.dart';
+import 'package:star_wars_app/src/search/search_delegate.dart';
 import 'package:star_wars_app/src/services/characters_service.dart';
 import 'package:star_wars_app/src/widgets/character_list.dart';
 import 'package:star_wars_app/src/widgets/lateral_menu.dart';
@@ -27,6 +28,16 @@ class _PersonajesPageState extends State<PersonajesPage> {
         elevation: 1,
         backgroundColor: Color(0xff232042),
         actions: [
+          // Boton para realizar la busqueda de personajes
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: DataSearch(),
+              );
+            },
+          ),
           // Se consulta en cual modo esta la app
           BlocBuilder<StatusmodeBloc, StatusmodeState>(
             builder: (context, state) {
@@ -103,6 +114,14 @@ class _CharacterList extends StatelessWidget {
                               'Make sure you are connected to the internet or in Online mode',
                           style: TextStyle(fontSize: 16.0, fontFamily: 'Karla'),
                         ),
+                      ),
+                      RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          text:
+                              'If the problem persists, contact an administrator',
+                          style: TextStyle(fontSize: 16.0, fontFamily: 'Karla'),
+                        ),
                       )
                     ],
                   );
@@ -170,8 +189,23 @@ class _CharacterList extends StatelessWidget {
                     RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(
+                        text: 'If it is your first time in the app',
+                        style: TextStyle(fontSize: 16.0, fontFamily: 'Karla'),
+                      ),
+                    ),
+                    RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
                         text:
                             'Make sure you are connected to the internet or in Online mode',
+                        style: TextStyle(fontSize: 16.0, fontFamily: 'Karla'),
+                      ),
+                    ),
+                    RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        text:
+                            'If the problem persists, contact an administrator',
                         style: TextStyle(fontSize: 16.0, fontFamily: 'Karla'),
                       ),
                     )

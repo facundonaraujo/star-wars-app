@@ -43,7 +43,7 @@ class CharacterDetail {
 }
 
 class CharactersDetailsList {
-  List<CharacterDetail> items = new List();
+  List<CharacterDetail> items = [];
 
   CharactersDetailsList();
 

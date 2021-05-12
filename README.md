@@ -16,7 +16,7 @@ La aplicación consta de 2 pantallas. La primera consiste en una lista/grilla or
 
 Por último, la aplicación tendrá un Navigation Drawer, desde donde se manejara el modo online y offline.
 
-# Descripción tecnica
+# Descripción técnica
 
 La app cuenta con dos páginas. La primera es la de PersonajesPage en donde se muestra una lista de personajes orientada verticalmente, la cual obtiene la información desde el servicio CharacterService. El servicio utiliza el modelo de Character para mapear la información que llega desde el api.
 
@@ -32,7 +32,29 @@ La app consta con un tema personalizado inspirado en la paleta de colores de las
 
 Tambien se incluyo un buscador de personajes en donde se utiliza un IconButton en el appbar de PersonajesPage el cual al apretar se abre un SearchDelegate en el cual si esta en el modo online se utiliza el SearchService donde se obttiene los personajes cuyo nombre coincida con la búsqueda, se los mapea con el modelo de Character y se dibuja la lista de personajes que coincidan con la búsqueda con el widget de PersonajesList. En el caso de estar en modo offline se busca entre los personajes guardados en el storage de Hydrated Bloc con la condición de que algún carácter de la búsqueda coincida en el campo de nombre, luego se dibuja la lista de personajes que coincidan con la búsqueda con el widget de PersonajesList.
 
-En el modo offline solo van a aparecer los personajes que se hayan previsualizado en el modo online, es decir que a medida que se vaya cargando la lista en el modo offline se guarda en el bloc y se va a poder previsualizar en el modo offline. Se tuvo que hacer de esta manera debido que la api trae los personajes paginados y no una lista completa. Por lo que si se quisiera obtener la lista completa se deberían hacer muchas consultas debido a la gran cantidad de personajes y eso aumentaria considerablemente el tiempo de carga de la app.
+En el modo offline solo van a aparecer los personajes que se hayan previsualizado en el modo online, es decir que a medida que se vaya cargando la lista en el modo offline se guarda en el bloc y se va a poder previsualizar en el modo offline. Se tuvo que hacer de esta manera debido que la api trae los personajes paginados y no una lista completa. Por lo que si se quisiera obtener la lista completa se deberían hacer muchas consultas debido a la gran cantidad de personajes y eso aumentaría considerablemente el tiempo de carga de la app.
+
+# Preview App
+
+Cambiar de modo
+
+![pantallas1-2](https://github.com/facundonaraujo/star-wars-app/raw/master/assets/pantallas1-2.jpg)
+
+Lista de personajes
+
+![pantallas3-4](https://github.com/facundonaraujo/star-wars-app/raw/master/assets/pantallas3-4.jpg)
+
+Modo online / Modo Offline
+
+![pantallas5-6](https://github.com/facundonaraujo/star-wars-app/raw/master/assets/pantallas5-6.jpg)
+
+Realizar Reporte
+
+![pantallas7-8](https://github.com/facundonaraujo/star-wars-app/raw/master/assets/pantallas7-8.jpg)
+
+Realizar Búsqueda
+
+![pantallas9-10](https://github.com/facundonaraujo/star-wars-app/raw/master/assets/pantallas9-10.jpg)
 
 # Anexo
 
@@ -67,19 +89,20 @@ Pagina que se utilizo para hacer los modelos
 Dependencias utilizadas en el proyecto
 
 - [cupertino_icons](https://pub.dev/packages/cupertino_icons) - Versión: ^1.0.0
-- [http](https://pub.dev/packages/http) - Versión: ^0.12.2
-- [animate_do](https://pub.dev/packages/animate_do) - Versión: ^1.7.5
-- [bloc](https://pub.dev/packages/bloc) - Versión: ^6.1.3
-- [flutter_bloc](https://pub.dev/packages/flutter_bloc)  - Versión: ^6.1.3
-- [hydrated_bloc](https://pub.dev/packages/hydrated_bloc)  - Versión: ^6.1.0
+- [http](https://pub.dev/packages/http) - Versión: ^0.13.3
+- [animate_do](https://pub.dev/packages/animate_do) - Versión: ^2.0.0
+- [bloc](https://pub.dev/packages/bloc) - Versión: ^7.0.0
+- [flutter_bloc](https://pub.dev/packages/flutter_bloc) - Versión: ^7.0.0
+- [hydrated_bloc](https://pub.dev/packages/hydrated_bloc) - Versión: ^7.0.0
+- [path_provider](https://pub.dev/packages/path_provider) - Versión: ^2.0.1
 
 ## FLUTTER
 
-Versión de flutter utilizada **1.22.6**
+Versión de flutter utilizada **2.0.4**
 
 ## DART
 
-Versión de Dart utilizada **2.10.5**
+Versión de Dart utilizada **2.12.3**
 
 ## Run App
 

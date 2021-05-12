@@ -7,7 +7,7 @@ class CharacterService {
   String _url = 'swapi.dev';
   int characterPage = 0;
   bool _loading = false;
-  List<Character> _characters = new List();
+  List<Character> _characters = [];
 
   // Se crean las varaibles del stream
   // Se utiliza streams por que la informacion va cambiando y se desea guardar la informacion ya obtenida y sumarle la nueva
@@ -59,7 +59,7 @@ class CharacterService {
       // En el caso de que se produzca un error al obtener los personajes
       // Se devuelve una lista vacia al stream
       // Y devuelve un error
-      List<Character> _charactersEmpty = new List();
+      List<Character> _charactersEmpty = [];
       charactersSink(_charactersEmpty);
       return ['ERROR'];
     }

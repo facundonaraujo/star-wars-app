@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
+
 import 'package:star_wars_app/src/bloc/character_detail_bloc/character_detail_bloc.dart';
 import 'package:star_wars_app/src/bloc/characters_bloc/characters_bloc.dart';
 import 'package:star_wars_app/src/bloc/status_bloc/statusmode_bloc.dart';
@@ -12,7 +16,11 @@ import 'package:star_wars_app/src/theme/theme.dart';
 void main() async {
   // Se inicia el storage de Hydrated Bloc
   WidgetsFlutterBinding.ensureInitialized();
-  HydratedBloc.storage = await HydratedStorage.build();
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: kIsWeb
+        ? HydratedStorage.webStorageDirectory
+        : await getTemporaryDirectory(),
+  );
   runApp(MyApp());
 }
 

@@ -7,7 +7,7 @@ class CharacterSearchService {
   String _url = 'swapi.dev';
   int characterPage = 0;
   bool _loading = false;
-  List<Character> _charactersSearch = new List();
+  List<Character> _charactersSearch = [];
 
   final _charactersSearchStreamController =
       StreamController<List<Character>>.broadcast();
@@ -55,7 +55,7 @@ class CharacterSearchService {
       // En el caso de que se produzca un error al obtener los personajes
       // Se devuelve una lista vacia al stream
       // Y devuelve un error
-      List<Character> _charactersSearchEmpty = new List();
+      List<Character> _charactersSearchEmpty = [];
       charactersSearchSink(_charactersSearchEmpty);
       return ['ERROR'];
     }

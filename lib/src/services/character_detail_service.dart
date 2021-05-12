@@ -8,25 +8,25 @@ import 'package:star_wars_app/src/models/starship_model.dart';
 import 'package:star_wars_app/src/models/vehicle_model.dart';
 
 class CharacterDetailService {
-  List<Vehicle> _vehicles = new List();
-  List<Starship> _startships = new List();
+  List<Vehicle> _vehicles = [];
+  List<Starship> _startships = [];
 
   Future<Starship> _processStarships(String url) async {
-    final resp = await http.get(url);
+    final resp = await http.get(Uri.parse(url));
     final decodedData = json.decode(resp.body);
     final startship = new Starship.fromJsonMap(decodedData);
     return startship;
   }
 
   Future<Vehicle> _processVehicles(String url) async {
-    final resp = await http.get(url);
+    final resp = await http.get(Uri.parse(url));
     final decodedData = json.decode(resp.body);
     final vehicle = new Vehicle.fromJsonMap(decodedData);
     return vehicle;
   }
 
   Future<Planet> _processPlanet(String url) async {
-    final resp = await http.get(url);
+    final resp = await http.get(Uri.parse(url));
     final decodedData = json.decode(resp.body);
     final planet = new Planet.fromJsonMap(decodedData);
     return planet;
@@ -76,8 +76,8 @@ class CharacterDetailService {
       // En el caso de que se produzca un error al obtener los datos
       // Se devuelve un new CharacterDetail vacio
       final Planet errPlanet = new Planet(name: 'Unknown');
-      final List<Vehicle> errVehicles = new List();
-      final List<Starship> errstartships = new List();
+      final List<Vehicle> errVehicles = [];
+      final List<Starship> errstartships = [];
       final CharacterDetail resp = new CharacterDetail(
           planet: errPlanet,
           startships: errstartships,

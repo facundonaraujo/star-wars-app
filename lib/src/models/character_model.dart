@@ -110,7 +110,7 @@ class Character {
 }
 
 class CharactersList {
-  List<Character> items = new List();
+  List<Character> items = [];
 
   CharactersList();
 

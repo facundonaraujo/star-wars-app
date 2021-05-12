@@ -34,6 +34,7 @@ class DataSearch extends SearchDelegate {
   @override
   ThemeData appBarTheme(BuildContext context) {
     return ThemeData(
+      backgroundColor: Color(0xff232042),
       primaryColor: Color(0xff232042),
       inputDecorationTheme: InputDecorationTheme(
         hintStyle:
@@ -81,87 +82,118 @@ class DataSearch extends SearchDelegate {
       if (status == true) {
         // Si esta en el modo online se hace la busqueda al characterSearchService
         // Cada vez que se realiza una nueva busqueda se vacia el stream y se setea la pagina inicial en 0
-        List<Character> charactersSearch = new List();
+        List<Character> charactersSearch = [];
         characterSearchService.characterPage = 0;
         characterSearchService.charactersSearchSink(charactersSearch);
         characterSearchService.getCharactersSearch(query);
-        return StreamBuilder(
-          stream: characterSearchService.charactersSearchStream,
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.hasData) {
-              print(snapshot.data);
-              // En el caso que se devuelta una lista vacia, es decir que no se encontro ningun personaje que coincida con
-              // la busqueda, se muestra un mensaje
-              if (snapshot.data.length == 0) {
-                return Column(
-                  children: [
-                    SizedBox(
-                      height: 200,
-                    ),
-                    Icon(
-                      Icons.error,
-                      color: Colors.white,
-                      size: 80,
-                    ),
-                    SizedBox(
-                      height: 25,
-                    ),
-                    Center(
-                        child: Text(
-                      'Search not found',
-                      style: TextStyle(color: Colors.white, fontSize: 25),
-                    )),
-                    SizedBox(
-                      height: 15,
-                    ),
-                  ],
-                );
+        return Container(
+          color: Color(0xff232042),
+          child: StreamBuilder(
+            stream: characterSearchService.charactersSearchStream,
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                print(snapshot.data);
+                // En el caso que se devuelta una lista vacia, es decir que no se encontro ningun personaje que coincida con
+                // la busqueda, se muestra un mensaje
+                if (snapshot.data.length == 0) {
+                  return Column(
+                    children: [
+                      SizedBox(
+                        height: 200,
+                      ),
+                      Icon(
+                        Icons.error,
+                        color: Colors.white,
+                        size: 80,
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Center(
+                          child: Text(
+                        'Search not found',
+                        style: TextStyle(color: Colors.white, fontSize: 25),
+                      )),
+                      SizedBox(
+                        height: 15,
+                      ),
+                    ],
+                  );
+                } else {
+                  final List<Character> characterList = snapshot.data;
+                  // En el caso de que si encuentre la busqueda se dibuja la lista
+                  return VerticalCharacterList(
+                    characters: characterList,
+                    nextPage: characterSearchService.getCharactersSearch,
+                    isSearch: true,
+                    query: query,
+                  );
+                }
               } else {
-                final List<Character> characterList = snapshot.data;
-                // En el caso de que si encuentre la busqueda se dibuja la lista
-                return VerticalCharacterList(
-                  characters: characterList,
-                  nextPage: characterSearchService.getCharactersSearch,
-                  isSearch: true,
-                  query: query,
-                );
+                // Mientras se hace la consulta se muestra una animacion del logo de star wars
+                return Center(
+                    child: Pulse(
+                  infinite: true,
+                  duration: Duration(milliseconds: 1500),
+                  child: Image(
+                    image: AssetImage('assets/star-wars-logo.png'),
+                    height: 100,
+                  ),
+                ));
               }
-            } else {
-              // Mientras se hace la consulta se muestra una animacion del logo de star wars
-              return Center(
-                  child: Pulse(
-                infinite: true,
-                duration: Duration(milliseconds: 1500),
-                child: Image(
-                  image: AssetImage('assets/star-wars-logo.png'),
-                  height: 100,
-                ),
-              ));
-            }
-          },
+            },
+          ),
         );
       } else {
         // En el caso que este en el modo offline
-        return BlocBuilder<CharactersBloc, CharactersState>(
-          builder: (context, state) {
-            // Se comprueba que la consulta ingreada coicida con los nombres de los personajes que hay en la lista del bloc
-            // En el caso de que coicidan se muestra las lista de personajes cuyo nombre coincide con la busqueda
-            // En el caso de que no coincida ninguno se muestra un mensaje
-            if (state.characters != null && state.characters.length > 0) {
-              List<Character> charactersSearch = new List();
-              for (Character character in state.characters) {
-                if (character.name
-                    .toLowerCase()
-                    .contains(query.toLowerCase())) {
-                  charactersSearch.add(character);
+        return Container(
+          color: Color(0xff232042),
+          child: BlocBuilder<CharactersBloc, CharactersState>(
+            builder: (context, state) {
+              // Se comprueba que la consulta ingreada coicida con los nombres de los personajes que hay en la lista del bloc
+              // En el caso de que coicidan se muestra las lista de personajes cuyo nombre coincide con la busqueda
+              // En el caso de que no coincida ninguno se muestra un mensaje
+              if (state.characters != null && state.characters.length > 0) {
+                List<Character> charactersSearch = [];
+                for (Character character in state.characters) {
+                  if (character.name
+                      .toLowerCase()
+                      .contains(query.toLowerCase())) {
+                    charactersSearch.add(character);
+                  }
                 }
-              }
-              if (charactersSearch.length > 0) {
-                return VerticalCharacterList(
-                  characters: charactersSearch,
-                  nextPage: characterSearchService.getCharactersSearch,
-                );
+                if (charactersSearch.length > 0) {
+                  return VerticalCharacterList(
+                    characters: charactersSearch,
+                    nextPage: characterSearchService.getCharactersSearch,
+                  );
+                } else {
+                  return Column(
+                    children: [
+                      SizedBox(
+                        height: 200,
+                      ),
+                      Icon(
+                        Icons.error,
+                        color: Colors.white,
+                        size: 80,
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Center(
+                          child: Text(
+                        'Search not found',
+                        style: TextStyle(color: Colors.white, fontSize: 25),
+                      )),
+                      SizedBox(
+                        height: 15,
+                      ),
+                    ],
+                  );
+                }
               } else {
+                // En el caso de que no hayan elementos en la lista se muestra un mensaje
                 return Column(
                   children: [
                     SizedBox(
@@ -177,57 +209,32 @@ class DataSearch extends SearchDelegate {
                     ),
                     Center(
                         child: Text(
-                      'Search not found',
+                      'There is no information to display',
                       style: TextStyle(color: Colors.white, fontSize: 25),
                     )),
                     SizedBox(
                       height: 15,
                     ),
+                    RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        text: 'If it is your first time in the app',
+                        style: TextStyle(fontSize: 16.0, fontFamily: 'Karla'),
+                      ),
+                    ),
+                    RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        text:
+                            'Make sure you are connected to the internet or in Online mode',
+                        style: TextStyle(fontSize: 16.0, fontFamily: 'Karla'),
+                      ),
+                    )
                   ],
                 );
               }
-            } else {
-              // En el caso de que no hayan elementos en la lista se muestra un mensaje
-              return Column(
-                children: [
-                  SizedBox(
-                    height: 200,
-                  ),
-                  Icon(
-                    Icons.error,
-                    color: Colors.white,
-                    size: 80,
-                  ),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  Center(
-                      child: Text(
-                    'There is no information to display',
-                    style: TextStyle(color: Colors.white, fontSize: 25),
-                  )),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      text: 'If it is your first time in the app',
-                      style: TextStyle(fontSize: 16.0, fontFamily: 'Karla'),
-                    ),
-                  ),
-                  RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      text:
-                          'Make sure you are connected to the internet or in Online mode',
-                      style: TextStyle(fontSize: 16.0, fontFamily: 'Karla'),
-                    ),
-                  )
-                ],
-              );
-            }
-          },
+            },
+          ),
         );
       }
     });
@@ -237,7 +244,9 @@ class DataSearch extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     // Son las sugerencias que aparecen cuando la persona escribe
     if (query.isEmpty) {
-      return Container();
+      return Container(
+        color: Color(0xff232042),
+      );
     }
     final CharacterSearchService characterSearchService =
         new CharacterSearchService();
